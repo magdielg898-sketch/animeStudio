@@ -36,22 +36,30 @@ export const SleepSevenDays: React.FC = () => {
  const scene=scenes.find(v=>sec>=v.a&&sec<v.b)??scenes[6];
  const tired=clamp(sec/23); const pulse=1+Math.sin(frame/5)*.035;
  const shake=sec>17&&sec<22?Math.sin(frame*1.7)*12:0;
- const bg=sec<8?"#f5f1e9":sec<17?"#e9edf4":sec<22?"#e9e5ef":"#f3f0e9";
+ const bg=sec<8?"#17243a":sec<17?"#182b3d":sec<22?"#241d38":"#172b32";
+ const cameraZoom=1.025+Math.sin(sec*.55)*.018+(sec>17&&sec<22?.035:0);
+ const cameraX=Math.sin(sec*.8)*9;
  return <AbsoluteFill style={{backgroundColor:bg,fontFamily:"Arial,sans-serif",overflow:"hidden"}}>
   <Audio src={staticFile("sleep-seven-days.mp3")}/>
-  <svg viewBox="0 0 1080 1920" width="100%" height="100%">
+  <svg viewBox="0 0 1080 1920" width="100%" height="100%" style={{transform:`translateX(${cameraX}px) scale(${cameraZoom})`,transformOrigin:"50% 50%"}}>
    <defs>
-    <linearGradient id="floor" x2="0" y2="1"><stop offset="0" stopColor="#e6e3dc"/><stop offset="1" stopColor="#cbc8c0"/></linearGradient>
+    <linearGradient id="floor" x2="0" y2="1"><stop offset="0" stopColor="#34475a"/><stop offset="1" stopColor="#101a29"/></linearGradient>
+    <radialGradient id="ambience"><stop offset="0" stopColor="#6da5c8" stopOpacity=".42"/><stop offset="1" stopColor="#101a29" stopOpacity="0"/></radialGradient>
+    <linearGradient id="topGlow" x2="0" y2="1"><stop offset="0" stopColor="#83c8e8" stopOpacity=".22"/><stop offset="1" stopColor="#83c8e8" stopOpacity="0"/></linearGradient>
     <filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter>
    </defs>
    <rect width="1080" height="1920" fill={bg}/>
-   <circle cx="850" cy="470" r="250" fill="#fff" opacity=".45"/>
+   <circle cx="850" cy="470" r="440" fill="url(#ambience)"/>
+   <rect width="1080" height="950" fill="url(#topGlow)"/>
+   <path d="M0 0 L390 0 L0 920Z M1080 0 L690 0 L1080 920Z" fill="#9bdcff" opacity=".035"/>
+   <g opacity=".16" fill="#bdeaff">{Array.from({length:22},(_,i)=><circle key={i} cx={(i*173+frame*0.7)%1080} cy={(i*257-frame*1.2+1920)%1920} r={2+(i%3)} />)}</g>
    <path d="M0 1450 Q540 1400 1080 1450 V1920 H0Z" fill="url(#floor)"/>
+   <path d="M0 1480 Q540 1430 1080 1480" stroke="#8bc5e5" strokeWidth="3" opacity=".22" fill="none"/>
    <path d="M0 1450 Q540 1400 1080 1450" stroke="#bcb9b1" strokeWidth="5" fill="none"/>
    <g transform="translate(0 0)">
-    <rect x="55" y="90" width="970" height="245" rx="38" fill="#171717"/>
-    <text x="95" y="195" fill="#fff" fontSize="54" fontWeight="900">{scene.title}</text>
-    <text x="95" y="270" fill="#ddd" fontSize="31">{scene.line}</text>
+    <rect x="55" y="90" width="970" height="245" rx="38" fill="#081321" opacity=".94" stroke="#8bc5e5" strokeOpacity=".24" strokeWidth="3"/>
+    <text x="95" y="195" fill="#f4fbff" fontSize="54" fontWeight="900">{scene.title}</text>
+    <text x="95" y="270" fill="#a9c8dc" fontSize="31">{scene.line}</text>
    </g>
    {sec<4 && <g transform="translate(0 0)">
     <rect x="125" y="1110" width="830" height="35" rx="18" fill="#8d7767"/>
@@ -69,7 +77,7 @@ export const SleepSevenDays: React.FC = () => {
    {sec>=8&&sec<12 && <g>
     <g transform="translate(540 820) scale(1.2)"><path d="M-120 0 C-220 -140 -90 -250 0 -170 C90 -250 220 -140 120 0 C190 110 70 210 0 150 C-70 210 -190 110 -120 0Z" fill="#f1a0a0" stroke="#a53d49" strokeWidth="9"/><path d="M-100 -35 q45 -90 85 0 q45 -90 85 0 M-100 50 q45 90 85 0 q45 90 85 0" stroke="#a53d49" strokeWidth="8" fill="none"/></g>
     <Person f={frame} tired={.55} x={540} y={1420} s={1.65}/>
-    <g fill="#d94841"><path d="M210 700 l30 -50 30 50z"/><path d="M800 700 l30 -50 30 50z"/></g>
+    <g fill="#ff765e"><path d="M210 700 l30 -50 30 50z"/><path d="M800 700 l30 -50 30 50z"/></g>
    </g>}
    {sec>=12&&sec<17 && <g>
     <rect x="150" y="1060" width="780" height="20" rx="10" fill="#b9b5ae"/>
@@ -98,10 +106,10 @@ export const SleepSevenDays: React.FC = () => {
     <Person f={frame} tired={0} pose="sleep" x={560} y={1160} s={1.7}/>
     <g fill="#171717" fontSize="60" fontWeight="bold"><text x="735" y="900">Z</text><text x="795" y="840" fontSize="42">Z</text></g>
    </g>}
-   <rect x="70" y="1775" width="940" height="12" rx="6" fill="#c7c7c0"/>
+   <rect x="70" y="1775" width="940" height="12" rx="6" fill="#577083"/>
    <rect x="70" y="1775" width={940*sec/30} height="12" rx="6" fill="#d94841"/>
-   <text x="75" y="1850" fill="#555" fontSize="30" letterSpacing="6">DATO Y RELATO</text>
-   <text x="1005" y="1850" textAnchor="end" fill="#555" fontSize="28">{String(Math.floor(sec)).padStart(2,"0")} / 30</text>
+   <text x="75" y="1850" fill="#d8edf8" fontSize="30" fontWeight="700" letterSpacing="6">DATO Y RELATO</text>
+   <text x="1005" y="1850" textAnchor="end" fill="#a9c8dc" fontSize="28">{String(Math.floor(sec)).padStart(2,"0")} / 30</text>
   </svg>
  </AbsoluteFill>;
 };
