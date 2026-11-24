@@ -34,8 +34,8 @@ jobs:
           python -m pip install --upgrade edge-tts
       - name: Create natural Spanish male narration
         run: |
-          mkdir -p apps/video/public
-          edge-tts --voice es-MX-JorgeNeural --rate=-4% --text "¿Qué le pasaría a tu cuerpo si pasaras siete días sin dormir? Al principio, solo sentirías cansancio. Pero después, tu cerebro empezaría a fallar: perderías concentración, reaccionarías lentamente y podrías sufrir alucinaciones. Tu memoria y tu capacidad de pensar también se verían afectadas. Dormir no es perder el tiempo: es una necesidad vital. ¿Aguantarías siete días?" --write-media apps/video/public/sleep-seven-days.mp3
+          mkdir -p examples/scenes
+          edge-tts --voice es-MX-JorgeNeural --rate=-4% --text "¿Qué le pasaría a tu cuerpo si pasaras siete días sin dormir? Al principio, solo sentirías cansancio. Pero después, tu cerebro empezaría a fallar: perderías concentración, reaccionarías lentamente y podrías sufrir alucinaciones. Tu memoria y tu capacidad de pensar también se verían afectadas. Dormir no es perder el tiempo: es una necesidad vital. ¿Aguantarías siete días?" --write-media examples/scenes/sleep-seven-days.mp3
       - name: Render vertical MP4
         run: pnpm --dir apps/video exec remotion render SleepSevenDays out/dato-y-relato-episodio-01.mp4 --codec h264 --crf 18
       - uses: actions/upload-artifact@v4
