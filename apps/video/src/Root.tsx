@@ -1,6 +1,7 @@
 import { type LipsyncDoc, type SceneDoc, type ToonDoc, previewSceneDoc } from "@animestudio/core";
 import { ToonComposition, toonMetadata } from "@animestudio/remotion";
 import { Composition, Folder } from "remotion";
+import { SleepSevenDays } from "./SleepSevenDays";
 import pip from "../../../examples/characters/pip.toon.json";
 import hello from "../../../examples/scenes/hello.scene.json";
 import l1 from "../../../examples/scenes/audio/l1.cues.json";
