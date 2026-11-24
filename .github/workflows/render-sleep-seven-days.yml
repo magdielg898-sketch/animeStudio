@@ -1,0 +1,46 @@
+name: Render Dato y Relato episode
+on:
+  push:
+    paths:
+      - "apps/video/src/SleepSevenDays.tsx"
+      - "apps/video/src/Root.tsx"
+      - ".github/workflows/render-sleep-seven-days.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.8.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          corepack enable
+          pnpm install --no-frozen-lockfile
+          python -m pip install --upgrade edge-tts
+      - name: Create natural Spanish male narration
+        run: |
+          mkdir -p apps/video/public
+          edge-tts --voice es-MX-JorgeNeural --rate=-4% --text "¿Qué le pasaría a tu cuerpo si pasaras siete días sin dormir? Al principio, solo sentirías cansancio. Pero después, tu cerebro empezaría a fallar: perderías concentración, reaccionarías lentamente y podrías sufrir alucinaciones. Tu memoria y tu capacidad de pensar también se verían afectadas. Dormir no es perder el tiempo: es una necesidad vital. ¿Aguantarías siete días?" --write-media apps/video/public/sleep-seven-days.mp3
+      - name: Render vertical MP4
+        run: pnpm --dir apps/video exec remotion render SleepSevenDays out/dato-y-relato-episodio-01.mp4 --codec h264 --crf 18
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dato-y-relato-episodio-01
+          path: apps/video/out/dato-y-relato-episodio-01.mp4
+          if-no-files-found: error
+          retention-days: 14
