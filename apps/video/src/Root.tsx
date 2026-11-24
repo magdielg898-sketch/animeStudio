@@ -24,6 +24,14 @@ const clipAssets = { characters: { pip: pipDoc } };
 export const RemotionRoot = () => (
   <>
     <Composition
+      id="SleepSevenDays"
+      component={SleepSevenDays}
+      durationInFrames={900}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
       id="Hello"
       component={ToonComposition}
       {...toonMetadata(helloScene)}
