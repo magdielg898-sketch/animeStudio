@@ -26,13 +26,13 @@ jobs:
           corepack enable
           pnpm install --no-frozen-lockfile
       - name: Validate canonical character rig
-        run: pnpm exec toon validate examples/characters/dato-relato-stickman.toon.json
-      - name: Render idle and walk previews
+        run: pnpm exec tsx packages/cli/src/bin.ts validate examples/characters/dato-relato-stickman.toon.json
+      - name: Render idle, walk and run previews
         run: |
           mkdir -p out/character-preview
-          pnpm exec toon render examples/characters/dato-relato-stickman.toon.json --time 0.8 --clip idle -o out/character-preview/idle.svg
-          pnpm exec toon render examples/characters/dato-relato-stickman.toon.json --time 0.35 --clip walk -o out/character-preview/walk.svg
-          pnpm exec toon render examples/characters/dato-relato-stickman.toon.json --time 0.22 --clip run -o out/character-preview/run.svg
+          pnpm exec tsx packages/cli/src/bin.ts render examples/characters/dato-relato-stickman.toon.json --time 0.8 --clip idle -o out/character-preview/idle.svg
+          pnpm exec tsx packages/cli/src/bin.ts render examples/characters/dato-relato-stickman.toon.json --time 0.35 --clip walk -o out/character-preview/walk.svg
+          pnpm exec tsx packages/cli/src/bin.ts render examples/characters/dato-relato-stickman.toon.json --time 0.22 --clip run -o out/character-preview/run.svg
       - uses: actions/upload-artifact@v4
         with:
           name: dato-y-relato-character-preview
