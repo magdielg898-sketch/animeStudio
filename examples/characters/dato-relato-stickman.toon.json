@@ -24,70 +24,379 @@
     "mouthNeutral": "<path d=\"M-10 -250 Q0 -247 10 -250\" fill=\"none\" stroke=\"palette(mouth)\" stroke-width=\"4\" stroke-linecap=\"round\"/>",
     "mouthSmile": "<path d=\"M-13 -254 Q0 -239 13 -254\" fill=\"none\" stroke=\"palette(mouth)\" stroke-width=\"4\" stroke-linecap=\"round\"/>",
     "mouthOpen": "<ellipse cx=\"0\" cy=\"-250\" rx=\"7\" ry=\"10\" fill=\"palette(mouth)\"/>",
-    "mouthFrown": "<path d=\"M-13 -244 Q0 -258 13 -244\" fill=\"none\" stroke=\"palette(mouth)\" stroke-width=\"4\" stroke-linecap=\"round\"/>",
-    "hand": "<circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"palette(white)\" stroke=\"palette(ink)\" stroke-width=\"5\"/>",
-    "foot": "<path d=\"M-2 -5 Q10 -8 19 -1 Q22 5 12 7 L-3 5 Z\" fill=\"palette(ink)\"/>"
+    "mouthFrown": "<path d=\"M-13 -244 Q0 -258 13 -244\" fill=\"none\" stroke=\"palette(mouth)\" stroke-width=\"4\" stroke-linecap=\"round\"/>"
   },
   "skeleton": [
-    { "id": "root" },
-    { "id": "hips", "parent": "root", "from": [0, -100], "to": [0, -112], "mass": 3 },
-    { "id": "body", "parent": "hips", "from": [0, -100], "to": [0, -205], "mass": 3, "limits": { "rotation": [-24, 24] } },
-    { "id": "head", "parent": "body", "from": [0, -205], "to": [0, -270], "mass": 2, "limits": { "rotation": [-35, 35] } },
-    { "id": "armNear1", "parent": "body", "from": [0, -185], "to": [34, -145], "mass": 0.8 },
-    { "id": "armNear2", "parent": "armNear1", "from": [34, -145], "to": [48, -103], "mass": 0.5 },
-    { "id": "armFar1", "parent": "body", "from": [0, -185], "to": [-34, -145], "mass": 0.8 },
-    { "id": "armFar2", "parent": "armFar1", "from": [-34, -145], "to": [-48, -103], "mass": 0.5 },
-    { "id": "legNear1", "parent": "hips", "from": [12, -98], "to": [20, -52], "mass": 1.2 },
-    { "id": "legNear2", "parent": "legNear1", "from": [20, -52], "to": [18, -7], "mass": 0.9 },
-    { "id": "legFar1", "parent": "hips", "from": [-12, -98], "to": [-20, -52], "mass": 1.2 },
-    { "id": "legFar2", "parent": "legFar1", "from": [-20, -52], "to": [-18, -7], "mass": 0.9 },
-    { "id": "toeNear", "parent": "legNear2", "from": [18, -7], "to": [38, -7], "inheritRotation": false },
-    { "id": "toeFar", "parent": "legFar2", "from": [-18, -7], "to": [2, -7], "inheritRotation": false }
+    {
+      "id": "root"
+    },
+    {
+      "id": "hips",
+      "parent": "root",
+      "from": [
+        0,
+        -100
+      ],
+      "to": [
+        0,
+        -112
+      ],
+      "mass": 3
+    },
+    {
+      "id": "body",
+      "parent": "hips",
+      "from": [
+        0,
+        -100
+      ],
+      "to": [
+        0,
+        -205
+      ],
+      "mass": 3,
+      "limits": {
+        "rotation": [
+          -24,
+          24
+        ]
+      }
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "from": [
+        0,
+        -205
+      ],
+      "to": [
+        0,
+        -270
+      ],
+      "mass": 2,
+      "limits": {
+        "rotation": [
+          -35,
+          35
+        ]
+      }
+    },
+    {
+      "id": "armNear1",
+      "parent": "body",
+      "from": [
+        0,
+        -185
+      ],
+      "to": [
+        34,
+        -145
+      ],
+      "mass": 0.8
+    },
+    {
+      "id": "armNear2",
+      "parent": "armNear1",
+      "from": [
+        34,
+        -145
+      ],
+      "to": [
+        48,
+        -103
+      ],
+      "mass": 0.5
+    },
+    {
+      "id": "armFar1",
+      "parent": "body",
+      "from": [
+        0,
+        -185
+      ],
+      "to": [
+        -34,
+        -145
+      ],
+      "mass": 0.8
+    },
+    {
+      "id": "armFar2",
+      "parent": "armFar1",
+      "from": [
+        -34,
+        -145
+      ],
+      "to": [
+        -48,
+        -103
+      ],
+      "mass": 0.5
+    },
+    {
+      "id": "legNear1",
+      "parent": "hips",
+      "from": [
+        12,
+        -98
+      ],
+      "to": [
+        20,
+        -52
+      ],
+      "mass": 1.2
+    },
+    {
+      "id": "legNear2",
+      "parent": "legNear1",
+      "from": [
+        20,
+        -52
+      ],
+      "to": [
+        18,
+        -7
+      ],
+      "mass": 0.9
+    },
+    {
+      "id": "legFar1",
+      "parent": "hips",
+      "from": [
+        -12,
+        -98
+      ],
+      "to": [
+        -20,
+        -52
+      ],
+      "mass": 1.2
+    },
+    {
+      "id": "legFar2",
+      "parent": "legFar1",
+      "from": [
+        -20,
+        -52
+      ],
+      "to": [
+        -18,
+        -7
+      ],
+      "mass": 0.9
+    }
   ],
   "parts": [
-    { "id": "legFar", "type": "hose", "bones": ["legFar1", "legFar2"], "width": [9, 8], "fill": "none", "stroke": "palette(ink)", "strokeWidth": 8, "cap": "round", "smooth": 0.35 },
-    { "id": "footFar", "type": "rigid", "bone": "toeFar", "art": "foot" },
-    { "id": "armFar", "type": "hose", "bones": ["armFar1", "armFar2"], "width": [8, 7], "fill": "none", "stroke": "palette(ink)", "strokeWidth": 8, "cap": "round", "smooth": 0.3 },
-    { "id": "handFar", "type": "rigid", "bone": "armFar2", "art": "hand" },
-    { "id": "bodyLine", "type": "hose", "bones": ["body"], "width": 10, "fill": "none", "stroke": "palette(ink)", "strokeWidth": 10, "cap": "round" },
-    { "id": "legNear", "type": "hose", "bones": ["legNear1", "legNear2"], "width": [10, 8], "fill": "none", "stroke": "palette(ink)", "strokeWidth": 9, "cap": "round", "smooth": 0.35 },
-    { "id": "footNear", "type": "rigid", "bone": "toeNear", "art": "foot" },
-    { "id": "armNear", "type": "hose", "bones": ["armNear1", "armNear2"], "width": [9, 7], "fill": "none", "stroke": "palette(ink)", "strokeWidth": 9, "cap": "round", "smooth": 0.3 },
-    { "id": "handNear", "type": "rigid", "bone": "armNear2", "art": "hand" },
-    { "id": "headShape", "type": "rigid", "bone": "head", "art": "head" },
-    { "id": "eyes", "type": "switch", "bone": "head", "variants": { "open": "eyesOpen", "closed": "eyesClosed", "wide": "eyesWide", "happy": "eyesHappy", "worried": "eyesWorried" }, "default": "open" },
-    { "id": "mouth", "type": "switch", "bone": "head", "variants": { "neutral": "mouthNeutral", "smile": "mouthSmile", "open": "mouthOpen", "frown": "mouthFrown" }, "default": "neutral" }
+    {
+      "id": "legFar",
+      "type": "hose",
+      "bones": [
+        "legFar1",
+        "legFar2"
+      ],
+      "width": [
+        9,
+        8
+      ],
+      "fill": "none",
+      "stroke": "palette(ink)",
+      "strokeWidth": 8,
+      "cap": "round",
+      "smooth": 0.35
+    },
+    {
+      "id": "armFar",
+      "type": "hose",
+      "bones": [
+        "armFar1",
+        "armFar2"
+      ],
+      "width": [
+        8,
+        7
+      ],
+      "fill": "none",
+      "stroke": "palette(ink)",
+      "strokeWidth": 8,
+      "cap": "round",
+      "smooth": 0.3
+    },
+    {
+      "id": "bodyLine",
+      "type": "hose",
+      "bones": [
+        "body"
+      ],
+      "width": 10,
+      "fill": "none",
+      "stroke": "palette(ink)",
+      "strokeWidth": 10,
+      "cap": "round"
+    },
+    {
+      "id": "legNear",
+      "type": "hose",
+      "bones": [
+        "legNear1",
+        "legNear2"
+      ],
+      "width": [
+        10,
+        8
+      ],
+      "fill": "none",
+      "stroke": "palette(ink)",
+      "strokeWidth": 9,
+      "cap": "round",
+      "smooth": 0.35
+    },
+    {
+      "id": "armNear",
+      "type": "hose",
+      "bones": [
+        "armNear1",
+        "armNear2"
+      ],
+      "width": [
+        9,
+        7
+      ],
+      "fill": "none",
+      "stroke": "palette(ink)",
+      "strokeWidth": 9,
+      "cap": "round",
+      "smooth": 0.3
+    },
+    {
+      "id": "headShape",
+      "type": "rigid",
+      "bone": "head",
+      "art": "head"
+    },
+    {
+      "id": "eyes",
+      "type": "switch",
+      "bone": "head",
+      "variants": {
+        "open": "eyesOpen",
+        "closed": "eyesClosed",
+        "wide": "eyesWide",
+        "happy": "eyesHappy",
+        "worried": "eyesWorried"
+      },
+      "default": "open"
+    },
+    {
+      "id": "mouth",
+      "type": "switch",
+      "bone": "head",
+      "variants": {
+        "neutral": "mouthNeutral",
+        "smile": "mouthSmile",
+        "open": "mouthOpen",
+        "frown": "mouthFrown"
+      },
+      "default": "neutral"
+    }
   ],
   "anchors": {
-    "head": { "bone": "head", "at": [0, -270] },
-    "handNear": { "bone": "armNear2", "at": [48, -103] },
-    "handFar": { "bone": "armFar2", "at": [-48, -103] }
+    "head": {
+      "bone": "head",
+      "at": [
+        0,
+        -270
+      ]
+    }
   },
-  "ik": [
-    { "id": "footNear", "bones": ["legNear1", "legNear2"], "bend": 1 },
-    { "id": "footFar", "bones": ["legFar1", "legFar2"], "bend": 1 }
-  ],
+  "ik": [],
   "controls": {
     "look": {
       "type": "aim",
       "targets": [
-        { "bone": "head", "weight": 0.55, "forward": 90, "maxAngle": 20 }
+        {
+          "bone": "head",
+          "weight": 0.55,
+          "forward": 90,
+          "maxAngle": 20
+        }
       ]
     }
   },
   "behaviors": [
-    { "type": "blink", "id": "blink", "part": "eyes", "open": "open", "closed": "closed", "interval": [2.4, 4.8], "duration": 0.13 },
-    { "type": "breathe", "id": "breathe", "bone": "body", "amount": 0.012, "period": 3.1 },
-    { "type": "sway", "id": "head-sway", "bone": "head", "angle": 1.2, "period": 4.2 }
+    {
+      "type": "blink",
+      "id": "blink",
+      "part": "eyes",
+      "open": "open",
+      "closed": "closed",
+      "interval": [
+        2.4,
+        4.8
+      ],
+      "duration": 0.13
+    },
+    {
+      "type": "breathe",
+      "id": "breathe",
+      "bone": "body",
+      "amount": 0.012,
+      "period": 3.1
+    },
+    {
+      "type": "sway",
+      "id": "head-sway",
+      "bone": "head",
+      "angle": 1.2,
+      "period": 4.2
+    }
   ],
   "clips": {
     "idle": {
       "duration": 2.4,
       "loop": true,
       "tracks": {
-        "bones.body.rotation": [[0, 0], [1.2, 1], [2.4, 0]],
-        "bones.armNear1.rotation": [[0, 0], [1.2, 2], [2.4, 0]],
-        "bones.armFar1.rotation": [[0, 0], [1.2, -2], [2.4, 0]]
+        "bones.body.rotation": [
+          [
+            0,
+            0
+          ],
+          [
+            1.2,
+            1
+          ],
+          [
+            2.4,
+            0
+          ]
+        ],
+        "bones.armNear1.rotation": [
+          [
+            0,
+            0
+          ],
+          [
+            1.2,
+            2
+          ],
+          [
+            2.4,
+            0
+          ]
+        ],
+        "bones.armFar1.rotation": [
+          [
+            0,
+            0
+          ],
+          [
+            1.2,
+            -2
+          ],
+          [
+            2.4,
+            0
+          ]
+        ]
       }
     },
     "walk": {
@@ -95,13 +404,104 @@
       "loop": true,
       "stride": 76,
       "tracks": {
-        "ik.footNear.x": [[0, 24], [0.4, -24, "linear"], [0.8, 24]],
-        "ik.footNear.y": [[0, 0], [0.2, -14], [0.4, 0], [0.8, 0]],
-        "ik.footFar.x": [[0, -24], [0.4, 24, "linear"], [0.8, -24]],
-        "ik.footFar.y": [[0, 0], [0.6, -14], [0.8, 0]],
-        "bones.armNear1.rotation": [[0, -22], [0.4, 22], [0.8, -22]],
-        "bones.armFar1.rotation": [[0, 22], [0.4, -22], [0.8, 22]],
-        "bones.body.rotation": [[0, -2], [0.4, 2], [0.8, -2]]
+        "bones.legNear1.rotation": [
+          [
+            0,
+            -24
+          ],
+          [
+            0.4,
+            24
+          ],
+          [
+            0.8,
+            -24
+          ]
+        ],
+        "bones.legNear2.rotation": [
+          [
+            0,
+            12
+          ],
+          [
+            0.4,
+            -12
+          ],
+          [
+            0.8,
+            12
+          ]
+        ],
+        "bones.legFar1.rotation": [
+          [
+            0,
+            24
+          ],
+          [
+            0.4,
+            -24
+          ],
+          [
+            0.8,
+            24
+          ]
+        ],
+        "bones.legFar2.rotation": [
+          [
+            0,
+            -12
+          ],
+          [
+            0.4,
+            12
+          ],
+          [
+            0.8,
+            -12
+          ]
+        ],
+        "bones.armNear1.rotation": [
+          [
+            0,
+            -22
+          ],
+          [
+            0.4,
+            22
+          ],
+          [
+            0.8,
+            -22
+          ]
+        ],
+        "bones.armFar1.rotation": [
+          [
+            0,
+            22
+          ],
+          [
+            0.4,
+            -22
+          ],
+          [
+            0.8,
+            22
+          ]
+        ],
+        "bones.body.rotation": [
+          [
+            0,
+            -2
+          ],
+          [
+            0.4,
+            2
+          ],
+          [
+            0.8,
+            -2
+          ]
+        ]
       }
     },
     "run": {
@@ -109,22 +509,160 @@
       "loop": true,
       "stride": 112,
       "tracks": {
-        "ik.footNear.x": [[0, 36], [0.24, -36, "linear"], [0.48, 36]],
-        "ik.footNear.y": [[0, -18], [0.12, -32], [0.24, -18], [0.48, -18]],
-        "ik.footFar.x": [[0, -36], [0.24, 36, "linear"], [0.48, -36]],
-        "ik.footFar.y": [[0, -30], [0.36, -12], [0.48, -30]],
-        "bones.armNear1.rotation": [[0, -42], [0.24, 42], [0.48, -42]],
-        "bones.armFar1.rotation": [[0, 42], [0.24, -42], [0.48, 42]],
-        "bones.body.rotation": [[0, -7], [0.24, 7], [0.48, -7]]
+        "bones.legNear1.rotation": [
+          [
+            0,
+            -42
+          ],
+          [
+            0.24,
+            42
+          ],
+          [
+            0.48,
+            -42
+          ]
+        ],
+        "bones.legNear2.rotation": [
+          [
+            0,
+            22
+          ],
+          [
+            0.24,
+            -22
+          ],
+          [
+            0.48,
+            22
+          ]
+        ],
+        "bones.legFar1.rotation": [
+          [
+            0,
+            42
+          ],
+          [
+            0.24,
+            -42
+          ],
+          [
+            0.48,
+            42
+          ]
+        ],
+        "bones.legFar2.rotation": [
+          [
+            0,
+            -22
+          ],
+          [
+            0.24,
+            22
+          ],
+          [
+            0.48,
+            -22
+          ]
+        ],
+        "bones.armNear1.rotation": [
+          [
+            0,
+            -42
+          ],
+          [
+            0.24,
+            42
+          ],
+          [
+            0.48,
+            -42
+          ]
+        ],
+        "bones.armFar1.rotation": [
+          [
+            0,
+            42
+          ],
+          [
+            0.24,
+            -42
+          ],
+          [
+            0.48,
+            42
+          ]
+        ],
+        "bones.body.rotation": [
+          [
+            0,
+            -7
+          ],
+          [
+            0.24,
+            7
+          ],
+          [
+            0.48,
+            -7
+          ]
+        ]
       }
     },
     "wave": {
       "duration": 1.2,
       "loop": true,
       "tracks": {
-        "bones.armNear1.rotation": [[0, -65], [0.6, -58], [1.2, -65]],
-        "bones.armNear2.rotation": [[0, -35], [0.3, 24], [0.6, -35], [0.9, 24], [1.2, -35]],
-        "bones.head.rotation": [[0, -3], [0.6, 2], [1.2, -3]]
+        "bones.armNear1.rotation": [
+          [
+            0,
+            -65
+          ],
+          [
+            0.6,
+            -58
+          ],
+          [
+            1.2,
+            -65
+          ]
+        ],
+        "bones.armNear2.rotation": [
+          [
+            0,
+            -35
+          ],
+          [
+            0.3,
+            24
+          ],
+          [
+            0.6,
+            -35
+          ],
+          [
+            0.9,
+            24
+          ],
+          [
+            1.2,
+            -35
+          ]
+        ],
+        "bones.head.rotation": [
+          [
+            0,
+            -3
+          ],
+          [
+            0.6,
+            2
+          ],
+          [
+            1.2,
+            -3
+          ]
+        ]
       }
     }
   }
