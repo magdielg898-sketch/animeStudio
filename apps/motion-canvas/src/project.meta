@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "shared": {
+    "background": "rgb(8,12,24)",
+    "range": [0, null],
+    "size": {"x": 1080, "y": 1920},
+    "audioOffset": 0
+  },
+  "preview": {"fps": 30, "resolutionScale": 0.5},
+  "rendering": {
+    "fps": 30,
+    "resolutionScale": 1,
+    "colorSpace": "srgb",
+    "exporter": {
+      "name": "@motion-canvas/ffmpeg",
+      "options": {"fileType": "mp4", "quality": 85}
+    }
+  }
+}
