@@ -13,21 +13,29 @@ const scenes = [
 const clamp = (n:number) => Math.max(0,Math.min(1,n));
 
 const Person: React.FC<{f:number; tired:number; pose?:string; x?:number; y?:number; s?:number}> = ({f,tired,pose="stand",x=0,y=0,s=1}) => {
- const sway=Math.sin(f/7)*5;
- const droop=tired*26;
- const blink=Math.floor(f/38)%5===0;
- const headY=-205+droop*.25;
- const armSwing=Math.sin(f/5)*18;
+ const tiredness=Math.max(0,Math.min(1,tired));
+ const bounce=Math.sin(f/4.2)*5*(1-tiredness*.55);
+ const sway=Math.sin(f/8)*7;
+ const droop=tiredness*28;
+ const blink=(f%113)<5 || (tiredness>.6 && (f%49)<7);
+ const headY=-205+droop*.25+bounce;
+ const squash=1+Math.sin(f/6)*.018;
+ const armSwing=Math.sin(f/5.5)*25;
+ const eyeY=headY-15;
+ const mouth=tiredness>.82?"M-15 "+(headY+24)+" q15 -8 30 0":tiredness>.5?"M-15 "+(headY+25)+" q15 16 30 0":"M-15 "+(headY+22)+" q15 18 30 0";
  return <g transform={`translate(${x} ${y+sway}) scale(${s})`} stroke="#171717" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none">
-  <circle cx="0" cy={headY} r="48" fill="#fff"/>
-  {pose==="sleep" ? <><path d={`M-22 ${headY-5} q10 10 20 0 M7 ${headY-5} q10 10 20 0`} strokeWidth="6"/><path d={`M-13 ${headY+22} q13 8 26 0`} strokeWidth="5"/></> :
-   <><path d={blink?`M-24 ${headY-12} h12 M12 ${headY-12} h12`:`M-18 ${headY-18} v9 M18 ${headY-18} v9`} strokeWidth="7"/>
-    <path d={tired>.65?`M-14 ${headY+25} q14 -14 28 0`:`M-14 ${headY+22} q14 13 28 0`} strokeWidth="6"/>
+  <ellipse cx="0" cy={headY} rx={48*squash} ry={48/squash} fill="#fff"/>
+  {pose==="sleep" ? <><path d={`M-24 ${headY-5} q10 10 20 0 M7 ${headY-5} q10 10 20 0`} strokeWidth="6"/><path d={`M-13 ${headY+22} q13 8 26 0`} strokeWidth="5"/></> :
+   <><path d={blink?`M-24 ${eyeY} h12 M12 ${eyeY} h12`:`M-18 ${eyeY-6} q7 -9 14 0 M11 ${eyeY-6} q7 -9 14 0`} strokeWidth="7"/>
+    <circle cx="-17" cy={eyeY+2} r={blink?0:5} fill="#171717" stroke="none"/><circle cx="17" cy={eyeY+2} r={blink?0:5} fill="#171717" stroke="none"/>
+    <path d={mouth} strokeWidth="6"/>
    </>}
   <path d={`M0 ${headY+48} Q${-droop*.4} -65 0 15`}/>
   {pose==="sit" ? <><path d="M0 -90 L-68 -35 L-70 15 M0 -90 L65 -40 L65 10"/><path d="M0 15 L-40 85 L-105 85 M0 15 L45 75 L105 75"/></> :
-   <><path d={`M0 -100 Q-65 ${-70+armSwing} -75 -18`}/><path d={`M0 -100 Q65 ${-70-armSwing} 75 -18`}/><path d="M0 15 L-42 105 L-52 180 M0 15 L42 105 L52 180"/></>}
-  {tired>.25 && <g stroke="#5aa5d6" strokeWidth="5"><path d={`M-49 ${headY-25} l-12 -12 M49 ${headY-25} l12 -12`}/><path d="M-86 -5 l-13 14"/></g>}
+   <><path d={`M0 -100 Q-65 ${-70+armSwing} -75 -18`}/><path d={`M0 -100 Q65 ${-70-armSwing} 75 -18`}/><path d={`M0 15 L${-42+Math.sin(f/5)*10} 105 L${-52+Math.sin(f/5)*18} 180 M0 15 L${42-Math.sin(f/5)*10} 105 L${52-Math.sin(f/5)*18} 180`}/></>}
+  <circle cx="-75" cy="-18" r="7" fill="#fff" strokeWidth="4"/><circle cx="75" cy="-18" r="7" fill="#fff" strokeWidth="4"/>
+  {tiredness>.25 && <g stroke="#5aa5d6" strokeWidth="5"><path d={`M-49 ${headY-25} l-12 -12 M49 ${headY-25} l12 -12`}/><path d="M-86 -5 l-13 14"/></g>}
+  {tiredness>.7 && <g fill="#e6a0a0" stroke="none"><ellipse cx="-31" cy={headY+12} rx="9" ry="5"/><ellipse cx="31" cy={headY+12} rx="9" ry="5"/></g>}
  </g>;
 };
 
