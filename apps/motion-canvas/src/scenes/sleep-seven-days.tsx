@@ -15,7 +15,7 @@ export default makeScene2D(function* (view) {
   const pulse = createRef<Circle>();
 
   view.add(
-    <Rect size={[1080, 1920]} fill={'#080c18'} />,
+    <Rect size={[1080, 1920]} fill={'#080c18'}>
     <Circle size={760} x={0} y={-170} fill={'#152442'} opacity={0.45} />,
     <Circle size={560} x={360} y={480} fill={'#1a2d4d'} opacity={0.22} />,
     <Txt ref={title} text={'7 DÍAS SIN DORMIR'} y={-760} fontSize={64} fontWeight={900} fill={'#f5f7ff'} />,
@@ -29,7 +29,8 @@ export default makeScene2D(function* (view) {
     <Txt ref={eyes} text={'•   •'} x={0} y={-180} fontSize={54} fontWeight={900} fill={'#111827'} />,
     <Txt ref={mouth} text={'o'} x={0} y={-95} fontSize={58} fontWeight={900} fill={'#111827'} />,
     <Circle ref={brain} size={125} x={310} y={-380} fill={'#ff6482'} opacity={0} />,
-    <Txt text={'CEREBRO EN ALERTA'} x={0} y={650} fontSize={42} fontWeight={800} fill={'#ffcf70'} />,
+    <Txt text={'CEREBRO EN ALERTA'} x={0} y={650} fontSize={42} fontWeight={800} fill={'#ffcf70'} />
+    </Rect>,
   );
 
   yield* waitFor(0.4);
