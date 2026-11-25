@@ -3,7 +3,7 @@ import {spawn} from 'node:child_process';
 import {existsSync, readdirSync, statSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 
-// Automated render smoke test: open the Motion Canvas editor in headless Chromium.\nconst root = process.cwd();
+const root = process.cwd();
 const server = spawn('pnpm', ['dev', '--', '--host', '127.0.0.1', '--port', '5173'], {
   cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
 });
