@@ -4,7 +4,7 @@ import {existsSync, readdirSync, statSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 
 const root = process.cwd();
-const server = spawn('pnpm', ['dev', '--', '--host', '127.0.0.1', '--port', '5173'], {
+const server = spawn('pnpm', ['dev'], {
   cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
 });
 let serverLog = '';
@@ -24,7 +24,7 @@ try {
   let ready = false;
   for (let i = 0; i < 60; i++) {
     try {
-      const response = await fetch('http://127.0.0.1:5173/');
+      const response = await fetch('http://127.0.0.1:9000/');
       if (response.ok) { ready = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -37,7 +37,7 @@ try {
   page.on('pageerror', error => pageErrors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') pageErrors.push(message.text()); });
 
-  await page.goto('http://127.0.0.1:5173/?render', {waitUntil: 'networkidle', timeout: 60000});
+  await page.goto('http://127.0.0.1:9000/?render', {waitUntil: 'networkidle', timeout: 60000});
 
   let mp4 = [];
   for (let i = 0; i < 150; i++) {
