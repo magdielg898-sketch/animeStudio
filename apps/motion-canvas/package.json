@@ -13,7 +13,6 @@
     "@motion-canvas/ffmpeg": "1.1.1",
     "@motion-canvas/ui": "3.17.2",
     "@motion-canvas/vite-plugin": "3.17.2",
-    "@preact/preset-vite": "2.10.1",
     "preact": "10.26.4",
     "vite": "4.5.14"
   },
