@@ -29,6 +29,8 @@ jobs:
         run: pnpm --dir apps/motion-canvas exec playwright install chromium
       - name: Build Motion Canvas project
         run: pnpm --dir apps/motion-canvas build
+      - name: Install FFmpeg verification tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Render MP4 through Motion Canvas editor
         run: node scripts/render-smoke-test.mjs
         working-directory: apps/motion-canvas
