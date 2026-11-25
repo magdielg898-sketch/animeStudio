@@ -1,4 +1,4 @@
- # Build workflow
+# Build workflow
 name: Validate Motion Canvas studio
 on:
   push:
