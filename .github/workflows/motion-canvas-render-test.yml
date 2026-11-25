@@ -1,4 +1,4 @@
-name: Motion Canvas MP4 smoke test
+name: Motion Canvas MP4 render
 on:
   workflow_dispatch:
   push:
@@ -11,9 +11,9 @@ permissions:
   contents: read
   actions: read
 jobs:
-  render-smoke-test:
+  render-episode:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -29,20 +29,31 @@ jobs:
         run: pnpm --dir apps/motion-canvas exec playwright install chromium
       - name: Build Motion Canvas project
         run: pnpm --dir apps/motion-canvas build
-      - name: Install FFmpeg verification tools
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Render MP4 through Motion Canvas editor
+      - name: Install FFmpeg and voice generator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3-pip
+          python3 -m pip install --break-system-packages edge-tts
+      - name: Render animated scenes
         run: node scripts/render-smoke-test.mjs
         working-directory: apps/motion-canvas
-      - name: Verify MP4 file
+      - name: Generate Spanish male narration and combine final MP4
         run: |
           FILE="$(find apps/motion-canvas/output -type f -name '*.mp4' -size +50k | head -n 1)"
           test -n "$FILE"
-          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate -of default=noprint_wrappers=1 "$FILE"
-          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 "$FILE"
+          edge-tts --voice es-MX-JorgeNeural --rate=-3% --text "¿Qué le pasaría a tu cuerpo si pasaras siete días sin dormir? Al principio, solo sentirías cansancio. Pero después, tu cerebro empezaría a fallar: perderías concentración, reaccionarías lentamente y podrías sufrir alucinaciones. Tu memoria y tu capacidad de pensar también se verían afectadas. Dormir no es perder el tiempo: es una necesidad vital. ¿Aguantarías siete días?" --write-media apps/motion-canvas/output/narracion.mp3
+          ffmpeg -y -i "$FILE" -i apps/motion-canvas/output/narracion.mp3 -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 160k -af apad -t 32 apps/motion-canvas/output/dato-y-relato-episodio-01-motion-canvas.mp4
+      - name: Verify final video and narration
+        run: |
+          FINAL="apps/motion-canvas/output/dato-y-relato-episodio-01-motion-canvas.mp4"
+          test -s "$FINAL"
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate -of default=noprint_wrappers=1 "$FINAL"
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 "$FINAL"
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$FINAL")"
+          python3 -c "import sys; d=float(sys.argv[1]); assert 29.5 <= d <= 32.5, d" "$DURATION"
       - uses: actions/upload-artifact@v4
         with:
-          name: dato-y-relato-motion-canvas-test-mp4
-          path: apps/motion-canvas/output/**/*.mp4
+          name: dato-y-relato-episodio-01-motion-canvas-final
+          path: apps/motion-canvas/output/dato-y-relato-episodio-01-motion-canvas.mp4
           if-no-files-found: error
           retention-days: 14
