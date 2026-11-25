@@ -4,12 +4,10 @@ import {existsSync, readdirSync, statSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 
 const root = process.cwd();
+// Start Vite in its own process group so the workflow can stop both pnpm and Vite.
 const server = spawn('pnpm', ['dev'], {
-  cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
+  cwd: root, detached: true, stdio: 'ignore',
 });
-let serverLog = '';
-server.stdout.on('data', chunk => serverLog += chunk.toString());
-server.stderr.on('data', chunk => serverLog += chunk.toString());
 
 const findMp4 = dir => {
   if (!existsSync(dir)) return [];
@@ -29,7 +27,7 @@ try {
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
-  if (!ready) throw new Error('Vite server did not start. ' + serverLog);
+  if (!ready) throw new Error('Vite server did not start.');
 
   browser = await chromium.launch({headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage']});
   const page = await browser.newPage({viewport: {width: 540, height: 960}});
@@ -39,19 +37,26 @@ try {
 
   await page.goto('http://127.0.0.1:9000/?render', {waitUntil: 'networkidle', timeout: 60000});
 
-  let mp4 = [];
-  for (let i = 0; i < 150; i++) {
-    mp4 = findMp4(join(root, 'output'));
-    if (!mp4.length) mp4 = findMp4(join(root, 'public', 'output'));
-    if (mp4.some(file => statSync(file).size > 50000)) break;
+  let readyFile = null;
+  let lastSize = -1;
+  let stableChecks = 0;
+  for (let i = 0; i < 180; i++) {
+    let files = findMp4(join(root, 'output'));
+    if (!files.length) files = findMp4(join(root, 'public', 'output'));
+    const candidate = files.find(file => statSync(file).size > 50000);
+    if (candidate) {
+      const size = statSync(candidate).size;
+      stableChecks = size === lastSize ? stableChecks + 1 : 0;
+      lastSize = size;
+      if (stableChecks >= 3) { readyFile = candidate; break; }
+    }
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
-  mp4 = mp4.filter(file => statSync(file).size > 50000);
-  if (!mp4.length) throw new Error('No MP4 produced after 150 seconds. Browser errors: ' + pageErrors.join(' | ') + '\nVite: ' + serverLog);
-  console.log('MOTION_CANVAS_MP4=' + resolve(mp4[0]));
-  console.log('MOTION_CANVAS_BYTES=' + statSync(mp4[0]).size);
+  if (!readyFile) throw new Error('MP4 was not fully written within 180 seconds. Browser errors: ' + pageErrors.join(' | '));
+  console.log('MOTION_CANVAS_MP4=' + resolve(readyFile));
+  console.log('MOTION_CANVAS_BYTES=' + statSync(readyFile).size);
   if (pageErrors.length) console.log('BROWSER_WARNINGS=' + pageErrors.join(' | '));
 } finally {
   if (browser) await browser.close();
-  server.kill('SIGTERM');
+  try { process.kill(-server.pid, 'SIGTERM'); } catch {}
 }
