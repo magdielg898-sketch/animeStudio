@@ -26,7 +26,7 @@ jobs:
       - name: Install workspace dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Install Chromium for headless rendering
-        run: pnpm --dir apps/motion-canvas exec playwright install --with-deps chromium
+        run: pnpm --dir apps/motion-canvas exec playwright install chromium
       - name: Build Motion Canvas project
         run: pnpm --dir apps/motion-canvas build
       - name: Render MP4 through Motion Canvas editor
