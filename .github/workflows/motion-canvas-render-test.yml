@@ -1,0 +1,46 @@
+name: Motion Canvas MP4 smoke test
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - "apps/motion-canvas/**"
+      - ".github/workflows/motion-canvas-render-test.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render-smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.8.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install workspace dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Install Chromium for headless rendering
+        run: pnpm --dir apps/motion-canvas exec playwright install --with-deps chromium
+      - name: Build Motion Canvas project
+        run: pnpm --dir apps/motion-canvas build
+      - name: Render MP4 through Motion Canvas editor
+        run: node scripts/render-smoke-test.mjs
+        working-directory: apps/motion-canvas
+      - name: Verify MP4 file
+        run: |
+          FILE="$(find apps/motion-canvas/output -type f -name '*.mp4' -size +50k | head -n 1)"
+          test -n "$FILE"
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate -of default=noprint_wrappers=1 "$FILE"
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 "$FILE"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dato-y-relato-motion-canvas-test-mp4
+          path: apps/motion-canvas/output/**/*.mp4
+          if-no-files-found: error
+          retention-days: 14
